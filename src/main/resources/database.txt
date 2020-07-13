@@ -1,0 +1,30 @@
+ΛΟΓΟΤΕΧΝΙΚΟ
+LITERARYBOOK1
+JOHN DOE
+9781234567890
+2011
+ΝΟΥΒΕΛΑ
+
+ΛΟΓΟΤΕΧΝΙΚΟ
+LITERARYBOOK2
+JOHN DOE
+9781234567809
+2000
+ΠΟΙΗΣΗ
+
+ΕΠΙΣΤΗΜΟΝΙΚΟ
+SCIENTIFIC BOOK 2
+JANE DOE
+9789012548760
+1890
+ΒΙΒΛΙΟ
+Lorem ipsum
+
+ΕΠΙΣΤΗΜΟΝΙΚΟ
+SCIENTIFIC BOOK 3
+JANE DOE
+9792386091384
+1980
+ΠΕΡΙΟΔΙΚΟ
+Lorem ipsum
+
