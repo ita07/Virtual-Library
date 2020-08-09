@@ -13,6 +13,7 @@ public enum ScientificType {
 
     /**
      * Pass String value that associates with the enum
+     *
      * @param scientificBook A string value that associates with the enum
      */
     ScientificType(String scientificBook) {

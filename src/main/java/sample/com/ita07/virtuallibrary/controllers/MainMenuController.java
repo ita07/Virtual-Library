@@ -10,6 +10,7 @@ import sample.com.ita07.virtuallibrary.helpers.SceneExchange;
 import sample.com.ita07.virtuallibrary.model.Book;
 import sample.com.ita07.virtuallibrary.model.LiteraryBook;
 import sample.com.ita07.virtuallibrary.model.ScientificBook;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -56,7 +57,8 @@ public class MainMenuController {
 
     /**
      * Read and parse the database text file
-     * @throws IOException On error reading the file
+     *
+     * @throws IOException         On error reading the file
      * @throws EmptyValueException On format error of the text file
      */
     private void parseDatabase() throws IOException, EmptyValueException {
@@ -87,6 +89,7 @@ public class MainMenuController {
 
     /**
      * Gets a book object
+     *
      * @param bookEntry List that holds all the information of a Book
      * @return Depending on bookType, it returns the corresponding book object
      */

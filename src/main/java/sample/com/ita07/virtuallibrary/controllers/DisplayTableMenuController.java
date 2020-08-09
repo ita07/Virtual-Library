@@ -6,14 +6,20 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import sample.com.ita07.virtuallibrary.database.DatabaseConnectivity;
 import sample.com.ita07.virtuallibrary.helpers.SceneExchange;
 import sample.com.ita07.virtuallibrary.model.Book;
+import sample.com.ita07.virtuallibrary.model.LiteraryBook;
+import sample.com.ita07.virtuallibrary.model.ScientificBook;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -52,10 +58,39 @@ public class DisplayTableMenuController {
     @FXML
     private Button deleteButton; // fx:id="deleteButton"
 
-    private ObservableList<Book> bookList = FXCollections.observableList(MainMenuController.books); // list that holds all the book objects -- turned the static list books in an observable list
+    //private ObservableList<Book> bookList = FXCollections.observableList(MainMenuController.books); // list that holds all the book objects -- turned the static list books in an observable list
+
+    private ObservableList<Book> bookData;
+    private String sqlSelectStatement = "SELECT * FROM library;";
 
     @FXML
     public void initialize() {
+        try {
+            loadLibraryData();
+        } catch (SQLException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("Error occured while trying to reach database!");
+            alert.showAndWait();
+            System.exit(1);
+        }
+    }
+    // Loads Database values into the table
+    private void loadLibraryData() throws SQLException {
+        try (Connection connection = DatabaseConnectivity.getConnection()) {
+            this.bookData = FXCollections.observableArrayList();
+
+            ResultSet rs = connection.createStatement().executeQuery(sqlSelectStatement);
+
+            while (rs.next()) {
+                if (rs.getString("Type").equals("ΛΟΓΟΤΕΧΝΙΚΟ")) {
+                    this.bookData.add(new LiteraryBook(rs.getString(1), rs.getString(2), rs.getString(3), (long) rs.getInt(4), rs.getInt(5), rs.getString(6)));
+                }
+                if (rs.getString("Type").equals("ΕΠΙΣΤΗΜΟΝΙΚΟ")) {
+                    this.bookData.add(new ScientificBook(rs.getString(1), rs.getString(2), rs.getString(3), (long) rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7)));
+                }
+            }
+        }
         //Set Table Properties on scene initialization and bind every column to a property
         columnBook.setCellValueFactory(new PropertyValueFactory<Book, String>("bookType"));
         columnTitle.setCellValueFactory(new PropertyValueFactory<Book, String>("title"));
@@ -64,8 +99,8 @@ public class DisplayTableMenuController {
         columnReleaseYear.setCellValueFactory(new PropertyValueFactory<Book, Integer>("releaseYear"));
         columnType.setCellValueFactory(new PropertyValueFactory<Book, String>("subGenre"));
         columnScientificField.setCellValueFactory(new PropertyValueFactory<Book, String>("scientificField"));
-        //Populate table with the book objects from the list.
-        tableView.setItems(bookList);
+
+        tableView.setItems(bookData);
     }
 
     //OnActionEvent Generated Method -- When Return Button is pressed

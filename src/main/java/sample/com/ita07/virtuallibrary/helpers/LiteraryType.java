@@ -14,6 +14,7 @@ public enum LiteraryType {
 
     /**
      * Pass String value that associates with the enum
+     *
      * @param literaryBook A string value that associates with the enum
      */
     LiteraryType(String literaryBook) {

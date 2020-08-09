@@ -9,15 +9,15 @@ import java.io.IOException;
 
 /**
  * Provides a convenient way to customize every scene
- *
  */
 public class SceneExchange {
 
     /**
      * Changes scene and handles stage properties
-     * @param fxmlFile Fxml file loaded in the scene
+     *
+     * @param fxmlFile    Fxml file loaded in the scene
      * @param resizeStage Ability to resize the stage
-     * @param stageName Title of the stage
+     * @param stageName   Title of the stage
      * @throws IOException On fxml load failure
      */
     public void changeScene(String fxmlFile, boolean resizeStage, String stageName) throws IOException {

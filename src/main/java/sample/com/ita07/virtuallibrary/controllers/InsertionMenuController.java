@@ -79,7 +79,8 @@ public class InsertionMenuController {
     private ObservableList<String> specificLiteraryTypeList; // hold the values Literary Type values
     private ObservableList<String> specificScientificTypeList; // holds the Scientific Type values
 
-    private ArrayList<String> isbnTempList = new ArrayList<>();; //ArrayList that holds the session's isbn numbers.
+    private ArrayList<String> isbnTempList = new ArrayList<>();
+    ; //ArrayList that holds the session's isbn numbers.
 
     private int currentYear; //holds an int value with the current Year
 
@@ -266,6 +267,7 @@ public class InsertionMenuController {
 
     /**
      * Validate Isbn and Release Year TextFields on various key events
+     *
      * @param textField A textfield to be examined
      */
     private void handleIsbnAndReleaseYearFields(TextField textField) {
@@ -284,6 +286,7 @@ public class InsertionMenuController {
 
     /**
      * Validate Title TextField on various key events
+     *
      * @param textField A textfield to be examined
      */
     private void handleTitleField(TextField textField) {
@@ -303,6 +306,7 @@ public class InsertionMenuController {
 
     /**
      * Validate Author TextField on various key events
+     *
      * @param textField A textfield to be examined
      */
     private void handleAuthorField(TextField textField) {
@@ -328,7 +332,8 @@ public class InsertionMenuController {
     }
 
     /**
-     *  Extra validation for the title textfield in case it bypassed the first checks
+     * Extra validation for the title textfield in case it bypassed the first checks
+     *
      * @param title String value of the titleTextfield input
      * @throws CharacterMismatchException If an restricted character is present in the title textfield
      */
@@ -341,6 +346,7 @@ public class InsertionMenuController {
 
     /**
      * Extra validation for the author textfield in case it bypassed the first checks
+     *
      * @param author String value of the authorTextfield input
      * @throws CharacterMismatchException If a restricted character is present in the title textfield
      */
@@ -361,6 +367,7 @@ public class InsertionMenuController {
 
     /**
      * Extra validation for the isbn textfield in case it bypassed the first checks
+     *
      * @param isbn String value of the isbnTextfield input
      * @throws CharacterMismatchException If a restricted character is present in the title textfield
      * @throws NumberOutOfBoundsException If numbers are out of the specified bounds
@@ -389,6 +396,7 @@ public class InsertionMenuController {
 
     /**
      * Extra validation for the release year textfield in case it bypassed the first checks
+     *
      * @param releaseYear String value of the releaseYearTextfield input
      * @throws NumberOutOfBoundsException If numbers are out of the specified bounds
      * @throws CharacterMismatchException If a restricted character is present in the title textfield

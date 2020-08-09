@@ -20,12 +20,13 @@ public class LiteraryBook extends Book {
 
     /**
      * Get default value of a Literary Book
-     * @param bookType Type of the book
-     * @param title Title of the book
-     * @param author Author of the book
-     * @param isbn ISBN number of the book
+     *
+     * @param bookType    Type of the book
+     * @param title       Title of the book
+     * @param author      Author of the book
+     * @param isbn        ISBN number of the book
      * @param releaseYear Release year of the book
-     * @param subGenre Enum Genre value of the book
+     * @param subGenre    Enum Genre value of the book
      */
     public LiteraryBook(String bookType, String title, String author, Long isbn, Integer releaseYear, String subGenre) {
         super(title, author, isbn, releaseYear);
@@ -43,6 +44,7 @@ public class LiteraryBook extends Book {
 
     /**
      * Get the genre of the book
+     *
      * @return Genre value
      */
     @Override
@@ -52,6 +54,7 @@ public class LiteraryBook extends Book {
 
     /**
      * Get the type of the book
+     *
      * @return Type of book - "ΛΟΓΟΤΕΧΝΙΚΟ"
      */
     @Override

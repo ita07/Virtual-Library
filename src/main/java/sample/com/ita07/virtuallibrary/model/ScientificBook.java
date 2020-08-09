@@ -21,12 +21,13 @@ public class ScientificBook extends Book {
 
     /**
      * Get default value of a Scientific Book
-     * @param bookType Type of the book
-     * @param title Title of the book
-     * @param author Author of the book
-     * @param isbn ISBN number of the book
-     * @param releaseYear Release year of the book
-     * @param subGenre Enum Genre value of the book
+     *
+     * @param bookType        Type of the book
+     * @param title           Title of the book
+     * @param author          Author of the book
+     * @param isbn            ISBN number of the book
+     * @param releaseYear     Release year of the book
+     * @param subGenre        Enum Genre value of the book
      * @param scientificField Info about the book
      */
     public ScientificBook(String bookType, String title, String author, Long isbn, Integer releaseYear, String subGenre, String scientificField) {
@@ -47,6 +48,7 @@ public class ScientificBook extends Book {
 
     /**
      * Get info about the book
+     *
      * @return Info about the book
      */
     public String getScientificField() {
@@ -55,6 +57,7 @@ public class ScientificBook extends Book {
 
     /**
      * Get the genre of the book
+     *
      * @return Genre value
      */
     public String getSubGenre() {
@@ -63,6 +66,7 @@ public class ScientificBook extends Book {
 
     /**
      * Get the type of the book
+     *
      * @return Type of book - "ΕΠΙΣΤΗΜΟΝΙΚΟ"
      */
     @Override

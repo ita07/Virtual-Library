@@ -9,6 +9,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import sample.com.ita07.virtuallibrary.customexceptions.EmptyValueException;
 import sample.com.ita07.virtuallibrary.helpers.SceneExchange;
+
 import java.io.IOException;
 
 /**
@@ -112,6 +113,7 @@ public class SearchMenuController {
 
     /**
      * Check every Book Title from the database, match it then return the titles matched
+     *
      * @param input String value of the search textfield
      */
     private void checkTitle(String input) {
@@ -128,6 +130,7 @@ public class SearchMenuController {
 
     /**
      * Check every Book Author from the database , match it then return the authors matched
+     *
      * @param input String value of the search textfield
      */
     private void checkAuthor(String input) {
