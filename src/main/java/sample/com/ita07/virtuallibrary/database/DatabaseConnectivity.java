@@ -16,9 +16,8 @@ public class DatabaseConnectivity {
             return DriverManager.getConnection(JDBA_DRIVER);
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.initOwner(submitButton.getScene().getWindow());
             alert.setHeaderText(null);
-            alert.setContentText("An error just occured while trying to establish a connection with the database!\n\nError Output:\t" + e.getMessage());
+            alert.setContentText("An error just occurred while trying to establish a connection with the database!\n\nError Output:\t" + e.getMessage());
             alert.showAndWait();
         } catch (ClassNotFoundException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -58,11 +58,6 @@ public class DisplayTableMenuController {
     @FXML
     private Button deleteButton; // fx:id="deleteButton"
 
-    //private ObservableList<Book> bookList = FXCollections.observableList(MainMenuController.books); // list that holds all the book objects -- turned the static list books in an observable list
-
-    private ObservableList<Book> bookData;
-    private String sqlSelectStatement = "SELECT * FROM library;";
-
     @FXML
     public void initialize() {
         try {
@@ -77,17 +72,19 @@ public class DisplayTableMenuController {
     }
     // Loads Database values into the table
     private void loadLibraryData() throws SQLException {
+        ObservableList<Book> bookData;
         try (Connection connection = DatabaseConnectivity.getConnection()) {
-            this.bookData = FXCollections.observableArrayList();
+            bookData = FXCollections.observableArrayList();
 
+            String sqlSelectStatement = "SELECT * FROM library;";
             ResultSet rs = connection.createStatement().executeQuery(sqlSelectStatement);
 
             while (rs.next()) {
                 if (rs.getString("Type").equals("ΛΟΓΟΤΕΧΝΙΚΟ")) {
-                    this.bookData.add(new LiteraryBook(rs.getString(1), rs.getString(2), rs.getString(3), (long) rs.getInt(4), rs.getInt(5), rs.getString(6)));
+                    bookData.add(new LiteraryBook(rs.getString(1), rs.getString(2), rs.getString(3), (long) rs.getInt(4), rs.getInt(5), rs.getString(6)));
                 }
                 if (rs.getString("Type").equals("ΕΠΙΣΤΗΜΟΝΙΚΟ")) {
-                    this.bookData.add(new ScientificBook(rs.getString(1), rs.getString(2), rs.getString(3), (long) rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7)));
+                    bookData.add(new ScientificBook(rs.getString(1), rs.getString(2), rs.getString(3), (long) rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7)));
                 }
             }
         }

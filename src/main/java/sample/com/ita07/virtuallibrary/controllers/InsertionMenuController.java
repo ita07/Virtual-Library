@@ -16,20 +16,16 @@ import org.apache.commons.lang3.StringUtils;
 import sample.com.ita07.virtuallibrary.customexceptions.CharacterMismatchException;
 import sample.com.ita07.virtuallibrary.customexceptions.EmptyValueException;
 import sample.com.ita07.virtuallibrary.customexceptions.NumberOutOfBoundsException;
+import sample.com.ita07.virtuallibrary.database.CustomQueryBuilder;
 import sample.com.ita07.virtuallibrary.helpers.LiteraryType;
 import sample.com.ita07.virtuallibrary.helpers.SceneExchange;
 import sample.com.ita07.virtuallibrary.helpers.ScientificType;
-import sample.com.ita07.virtuallibrary.model.Book;
 import sample.com.ita07.virtuallibrary.model.LiteraryBook;
 import sample.com.ita07.virtuallibrary.model.ScientificBook;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Controller Class for Insertion Menu scene
@@ -75,12 +71,8 @@ public class InsertionMenuController {
     @FXML // fx:id="scientificFieldTextField"
     private TextField scientificFieldTextField;
 
-
     private ObservableList<String> specificLiteraryTypeList; // hold the values Literary Type values
     private ObservableList<String> specificScientificTypeList; // holds the Scientific Type values
-
-    private ArrayList<String> isbnTempList = new ArrayList<>();
-    ; //ArrayList that holds the session's isbn numbers.
 
     private int currentYear; //holds an int value with the current Year
 
@@ -99,8 +91,6 @@ public class InsertionMenuController {
         //set the combobox values to the corresponding enum string values
         specificScientificTypeList = FXCollections.observableArrayList(ScientificType.valueOf("ΠΕΡΙΟΔΙΚΟ").toString(), ScientificType.valueOf("ΒΙΒΛΙΟ").toString(), ScientificType.valueOf("ΠΡΑΚΤΙΚΑ_ΣΥΝΕΔΡΙΩΝ").toString());
         specificLiteraryTypeList = FXCollections.observableArrayList(LiteraryType.valueOf("ΜΥΘΙΣΤΟΡΗΜΑ").toString(), LiteraryType.valueOf("ΝΟΥΒΕΛΑ").toString(), LiteraryType.valueOf("ΔΙΗΓΗΜΑ").toString(), LiteraryType.valueOf("ΠΟΙΗΣΗ").toString());
-
-
     }
 
     //OnActionEvent Generated Method -- When General Category Combobox has a value selected
@@ -119,7 +109,6 @@ public class InsertionMenuController {
             if (specificScientificCategoryComboBox.isVisible()) { //hide Scientific Book's combobox if it's showing
                 specificScientificCategoryComboBox.setVisible(false);
             }
-
             specificLiteraryCategoryComboBox.getItems().setAll(specificLiteraryTypeList);  // Add values in Literary's combobox
             specificLiteraryCategoryComboBox.setVisible(true);
         }
@@ -130,8 +119,8 @@ public class InsertionMenuController {
     void handleTitleKeyEvent(KeyEvent event) {
         handleTitleField(titleTextField);
     }
-
     //OnKeyEvent Generated Method -- author textfield
+
     @FXML
     void handleAuthorKeyEvent(KeyEvent event) {
         handleAuthorField(authorTextField);
@@ -152,6 +141,7 @@ public class InsertionMenuController {
     //OnActionEvent Generated Method -- When submit button is pressed
     @FXML
     void handleSubmitButton(ActionEvent event) {
+
         try {
             // Check if general Category Combobox has any value selected
             if (generalCategoryComboBox.getValue() == null) { // if no value is selected
@@ -164,8 +154,6 @@ public class InsertionMenuController {
             String releaseYear = releaseYearTextField.getText(); //Store release Year value
             String innerType;
             String scientificField;
-            String data = ""; // value that will be written in the text file database
-            Book bookEntry;
             if (generalCategoryComboBox.getValue().equals("ΕΠΙΣΤΗΜΟΝΙΚΟ")) { // Check if general combobox value equals "ΕΠΙΣΤΗΜΟΝΙΚΟ"
                 //Functions that (double check)/validate the input in the first four textfields
                 validateTitle(title);
@@ -182,9 +170,8 @@ public class InsertionMenuController {
                     throw new EmptyValueException("Εκχωρησε ελευθερο κειμενο στο πεδιο Επιστημονικο Πεδιο! Δεν μπορει να ειναι αδειο!");
                 }
                 //If everything goes well, store all the values like so
-                bookEntry = new ScientificBook(typeOfBook, StringUtils.stripAccents(title), StringUtils.stripAccents(author), Long.parseLong(isbn), Integer.parseInt(releaseYear), innerType, scientificField);
-                //Add a new line to every bookEntry and return a string of that
-                data = String.join(System.lineSeparator(), bookEntry.toString());
+                ScientificBook bookEntry = new ScientificBook(typeOfBook, StringUtils.stripAccents(title), StringUtils.stripAccents(author), Long.parseLong(isbn), Integer.parseInt(releaseYear), innerType, scientificField);
+                new CustomQueryBuilder(bookEntry);
 
             } else if (generalCategoryComboBox.getValue().equals("ΛΟΓΟΤΕΧΝΙΚΟ")) { // Check if general combobox value equals "ΛΟΓΟΤΕΧΝΙΚΟ"
                 //Functions that (double check)/validate the input in the first four textfields
@@ -198,29 +185,15 @@ public class InsertionMenuController {
                     throw new EmptyValueException("Επελεξε μια τιμη στο πεδιο Ειδος! Δεν μπορει να ειναι αδειο!");
                 }
                 //If everything goes well, store all the values like so
-                bookEntry = new LiteraryBook(typeOfBook, StringUtils.stripAccents(title), StringUtils.stripAccents(author), Long.parseLong(isbn), Integer.parseInt(releaseYear), innerType);
-                //Add a new line to every bookEntry and return a string of that
-                data = String.join(System.lineSeparator(), bookEntry.toString());
-
+                LiteraryBook bookEntry = new LiteraryBook(typeOfBook, StringUtils.stripAccents(title), StringUtils.stripAccents(author), Long.parseLong(isbn), Integer.parseInt(releaseYear), innerType);
+                new CustomQueryBuilder(bookEntry);
             }
-            //Write data to the specified file
-            Files.write(Paths.get("src/main/resources/database.txt"), Arrays.asList(data, ""), StandardOpenOption.APPEND);
-            //Store the session's isbn in a list for later check.
-            isbnTempList.add(isbn);
-            //Successful append operation to txt file message.
+            //Successful database operation message
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.initOwner(submitButton.getScene().getWindow());
             alert.setHeaderText(null);
             alert.setContentText("Εγινε επιτυχης καταχωρηση του βιβλιου στη συλλογη σου!");
             alert.showAndWait();
-
-        } catch (IOException e) { //if something goes wrong while trying to read the file or during a file operation
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(submitButton.getScene().getWindow());
-            alert.setHeaderText(null);
-            alert.setContentText("Υπηρξε προβλημα σχετικα με το αρχειο. Ελεγξε την κατασταση του αρχειου και δοκιμασε ξανα");
-            alert.showAndWait();
-
         } catch (EmptyValueException e) { // custom exception thrown from the validation methods
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(submitButton.getScene().getWindow());
@@ -233,7 +206,7 @@ public class InsertionMenuController {
             alert.setHeaderText(null);
             alert.setContentText("Σφαλμα κατα την προσπελαση των αριθμων. Ελεγξε τα πεδια!");
             alert.showAndWait();
-        } catch (NumberOutOfBoundsException | CharacterMismatchException e) { // custom exception thrown from the validation methods
+        } catch (NumberOutOfBoundsException | CharacterMismatchException | SQLException e) { // custom exception thrown from the validation methods
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(isbnTextField.getScene().getWindow());
             alert.setHeaderText(null);
@@ -255,13 +228,11 @@ public class InsertionMenuController {
             scientificFieldTextField.clear();
         }
         specificLiteraryCategoryComboBox.getSelectionModel().clearSelection();
-
     }
 
     //OnMouseEvent Generated Method -- When return label is clicked
     @FXML
     void handleMouseClickOnReturnLabel(MouseEvent event) throws IOException {
-        isbnTempList.clear();
         new SceneExchange().changeScene("/fxml/mainMenu.fxml", false, "Μενου");
     }
 
@@ -373,6 +344,7 @@ public class InsertionMenuController {
      * @throws NumberOutOfBoundsException If numbers are out of the specified bounds
      */
     private void validateISBN(String isbn) throws CharacterMismatchException, NumberOutOfBoundsException {
+        String selectISBNQuery = "SELECT ISBN FROM library WHERE ISBN = ?";
         if (isbn.isEmpty()) {
             throw new CharacterMismatchException("Σφαλμα! Το πεδιο ISBN ειναι κενο!");
         } else if (isbn.trim().length() != 13) { //ISBN size must be 13 digits
@@ -387,10 +359,7 @@ public class InsertionMenuController {
                 }
             }
         }
-        //Check if our isbn input has already been registered in this session or in our database
-        if (MainMenuController.bookISBN.contains(isbn) || isbnTempList.contains(isbn)) {
-            throw new CharacterMismatchException("O αριθμος ISBN εχει ηδη καταχωρηθει! Ελεγξε ξανα για πιθανα λαθη!");
-        }
+        //Check if our isbn input has already been registered in our database
 
     }
 
