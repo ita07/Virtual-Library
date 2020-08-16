@@ -13,14 +13,10 @@ import sample.com.ita07.virtuallibrary.model.LiteraryBook;
 import sample.com.ita07.virtuallibrary.model.ScientificBook;
 
 import java.io.IOException;
-import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -62,7 +58,7 @@ public class DisplayTableMenuController {
     public void initialize() {
         try {
             loadLibraryData();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setContentText("Error occured while trying to reach database!");
@@ -70,6 +66,7 @@ public class DisplayTableMenuController {
             System.exit(1);
         }
     }
+
     // Loads Database values into the table
     private void loadLibraryData() throws SQLException {
         ObservableList<Book> bookData;
@@ -81,10 +78,10 @@ public class DisplayTableMenuController {
 
             while (rs.next()) {
                 if (rs.getString("Type").equals("ΛΟΓΟΤΕΧΝΙΚΟ")) {
-                    bookData.add(new LiteraryBook(rs.getString(1), rs.getString(2), rs.getString(3), (long) rs.getInt(4), rs.getInt(5), rs.getString(6)));
+                    bookData.add(new LiteraryBook(rs.getString(1), rs.getString(2), rs.getString(3), rs.getLong(4), rs.getInt(5), rs.getString(6)));
                 }
                 if (rs.getString("Type").equals("ΕΠΙΣΤΗΜΟΝΙΚΟ")) {
-                    bookData.add(new ScientificBook(rs.getString(1), rs.getString(2), rs.getString(3), (long) rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7)));
+                    bookData.add(new ScientificBook(rs.getString(1), rs.getString(2), rs.getString(3), rs.getLong(4), rs.getInt(5), rs.getString(6), rs.getString(7)));
                 }
             }
         }
@@ -112,6 +109,7 @@ public class DisplayTableMenuController {
     @FXML
     void handleDeleteButton(ActionEvent event) throws IOException {
         Book selectedBook = tableView.getSelectionModel().getSelectedItem(); //Save the book entry that's about to get deleted
+        String sqlDeleteQuery = "DELETE FROM library WHERE ISBN = ?;";
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION); //Popup alert to double check book deletion.
         alert.initOwner(deleteButton.getScene().getWindow()); // assign icon in the popup alert
@@ -135,15 +133,23 @@ public class DisplayTableMenuController {
                 alert1.showAndWait();
 
             } else { //If user selected a book entry from the table
-                tableView.getItems().remove(selectedBook); //Remove book from the table
-                MainMenuController.books.remove(selectedBook); //Remove book entry from books list
+                //Delete the book from the database and then remove it from the table
+                try (Connection connection = DatabaseConnectivity.getConnection();
+                     PreparedStatement preparedStatement = connection.prepareStatement(sqlDeleteQuery)) {
 
-                //Empty the database file
-                FileChannel.open(Paths.get("src/main/resources/database.txt"), StandardOpenOption.WRITE).truncate(0).close();
+                    preparedStatement.setLong(1, selectedBook.getIsbn());
 
-                for (Book book : MainMenuController.books) {
-                    //Write every entry of the books list in the database text file
-                    Files.write(Paths.get("src/main/resources/database.txt"), Arrays.asList(book.toString(), ""), StandardOpenOption.APPEND);
+                    preparedStatement.executeUpdate();
+                    tableView.getItems().remove(selectedBook); //Remove book from the table
+
+                } catch (SQLException e) {
+                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                    alert2.initOwner(deleteButton.getScene().getWindow());
+                    alert2.setTitle("Error");
+                    alert2.setHeaderText(null);
+                    alert2.setResizable(false);
+                    alert2.setContentText("Error occurred while parsing the database!");
+                    alert2.showAndWait();
                 }
             }
         }
