@@ -73,31 +73,31 @@ public class SearchMenuController {
             bookList.getItems().clear();
             String input = searchTextfield.getText(); //Get input from textfield
             if (input.trim().isEmpty()) { //if input is empty
-                throw new EmptyValueException("Η αναζητηση σου ειναι κενη! Προσπαθησε ξανα!"); //Throw custom exception
+                throw new EmptyValueException("Input is empty! Try again!"); //Throw custom exception
             }
             if (titleRadioButton.isSelected()) { // If title radio button is selected
                 checkTitle(input);
             } else if (authorRadioButton.isSelected()) { // If title radio button is selected
                 checkAuthor(input);
             } else {
-                throw new EmptyValueException("Πρεπει να επιλεξεις Τιτλος ή Συγγραφεας ωστε η αναζητηση να γινει με βαση την επιλογη σου!"); //Throw custom exception if none of the above matches
+                throw new EmptyValueException("Select Title or Author search"); //Throw custom exception if none of the above matches
             }
             if (bookList.getItems().isEmpty()) { //If nothing is found containing the input from the textfield
-                throw new EmptyValueException("Δεν βρεθηκε καμια εκχωρηση με βαση τις πληροφοριες που εισαγατε!"); // throw custom exception
+                throw new EmptyValueException("No results found!"); // throw custom exception
             }
         } catch (EmptyValueException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR); // Popup error alert
             alert.initOwner(searchButton.getScene().getWindow()); // assign icon in the popup alert
-            alert.setTitle("Σφαλμα αναζητησης");
+            alert.setTitle("Empty input error");
             alert.setHeaderText(null);
             alert.setContentText(e.getMessage()); // Set context text as the message thrown by the exception
             alert.showAndWait();
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR); // Popup error alert
             alert.initOwner(searchButton.getScene().getWindow()); // assign icon in the popup alert
-            alert.setTitle("Σφαλμα αναζητησης");
+            alert.setTitle("Search error");
             alert.setHeaderText(null);
-            alert.setContentText("Σφαλμα κατα την προσπελαση της βασης δεδομενων"); // Set context text as the message thrown by the exception
+            alert.setContentText("Error while parsing database info"); // Set context text as the message thrown by the exception
             alert.showAndWait();
         }
     }
@@ -106,7 +106,7 @@ public class SearchMenuController {
     @FXML
     void handleMouseClickOnReturnLabel(MouseEvent event) throws IOException {
         //Swap scenes
-        new SceneExchange().changeScene("/fxml/mainMenu.fxml", false, "Μενου");
+        new SceneExchange().changeScene("/fxml/mainMenu.fxml", false, "Main Menu");
     }
 
     /**

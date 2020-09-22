@@ -5,9 +5,9 @@ package sample.com.ita07.virtuallibrary.helpers;
  */
 @SuppressWarnings("NonAsciiCharacters")
 public enum ScientificType {
-    ΠΕΡΙΟΔΙΚΟ("ΠΕΡΙΟΔΙΚΟ"),
-    ΒΙΒΛΙΟ("ΒΙΒΛΙΟ"),
-    ΠΡΑΚΤΙΚΑ_ΣΥΝΕΔΡΙΩΝ("ΠΡΑΚΤΙΚΑ ΣΥΝΕΔΡΙΩΝ");
+    MAGAZINE("MAGAZINE"),
+    BOOK("BOOK"),
+    CONFERENCE_NOTES("CONFERENCE NOTES");
 
     private final String scientificBook; // String representation of the enum value
 

@@ -5,10 +5,10 @@ package sample.com.ita07.virtuallibrary.helpers;
  */
 @SuppressWarnings("NonAsciiCharacters")
 public enum LiteraryType {
-    ΜΥΘΙΣΤΟΡΗΜΑ("ΜΥΘΙΣΤΟΡΗΜΑ"),
-    ΝΟΥΒΕΛΑ("ΝΟΥΒΕΛΑ"),
-    ΔΙΗΓΗΜΑ("ΔΙΗΓΗΜΑ"),
-    ΠΟΙΗΣΗ("ΠΟΙΗΣΗ");
+    FICTION("FICTION"),
+    NOVEL("NOVEL"),
+    NARRATIVE("NARRATIVE"),
+    POETRY("POETRY");
 
     private final String literaryBook; // String representation of the enum value
 

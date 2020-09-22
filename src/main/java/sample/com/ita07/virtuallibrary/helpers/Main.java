@@ -42,7 +42,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainMenu.fxml")); // root Node of the fxml file
         Scene sceneMainMenu = new Scene(root); // create a Scene for a specific root Node
         mainMenuStage.getIcons().add(new Image("images/icon.png")); // add stage Icon
-        mainMenuStage.setTitle("Μενου");
+        mainMenuStage.setTitle("Main Menu");
         mainMenuStage.setScene(sceneMainMenu); // set scene for the stage
         mainMenuStage.setResizable(false);
         sceneMainMenu.getStylesheets().add("/stylesheets/main_menu.css"); // add CSS styling in the scene

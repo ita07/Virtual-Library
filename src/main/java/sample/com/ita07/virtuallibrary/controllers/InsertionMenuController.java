@@ -85,18 +85,18 @@ public class InsertionMenuController {
         mainPane.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
         //General Category Initialization
         // holds the general category values
-        ObservableList<String> generalCategoryList = FXCollections.observableArrayList("ΛΟΓΟΤΕΧΝΙΚΟ", "ΕΠΙΣΤΗΜΟΝΙΚΟ");
+        ObservableList<String> generalCategoryList = FXCollections.observableArrayList("LITERARY", "SCIENTIFIC");
         generalCategoryComboBox.setItems(generalCategoryList);
 
         //set the combobox values to the corresponding enum string values
-        specificScientificTypeList = FXCollections.observableArrayList(ScientificType.valueOf("ΠΕΡΙΟΔΙΚΟ").toString(), ScientificType.valueOf("ΒΙΒΛΙΟ").toString(), ScientificType.valueOf("ΠΡΑΚΤΙΚΑ_ΣΥΝΕΔΡΙΩΝ").toString());
-        specificLiteraryTypeList = FXCollections.observableArrayList(LiteraryType.valueOf("ΜΥΘΙΣΤΟΡΗΜΑ").toString(), LiteraryType.valueOf("ΝΟΥΒΕΛΑ").toString(), LiteraryType.valueOf("ΔΙΗΓΗΜΑ").toString(), LiteraryType.valueOf("ΠΟΙΗΣΗ").toString());
+        specificScientificTypeList = FXCollections.observableArrayList(ScientificType.valueOf("MAGAZINE").toString(), ScientificType.valueOf("BOOK").toString(), ScientificType.valueOf("CONFERENCE_NOTES").toString());
+        specificLiteraryTypeList = FXCollections.observableArrayList(LiteraryType.valueOf("FICTION").toString(), LiteraryType.valueOf("NOVEL").toString(), LiteraryType.valueOf("NARRATIVE").toString(), LiteraryType.valueOf("POETRY").toString());
     }
 
     //OnActionEvent Generated Method -- When General Category Combobox has a value selected
     @FXML
     void handleGeneralCategorySelection(ActionEvent event) {
-        if (generalCategoryComboBox.getValue().equals("ΕΠΙΣΤΗΜΟΝΙΚΟ")) {
+        if (generalCategoryComboBox.getValue().equals("SCIENTIFIC")) {
             extraPaneForScientific.setVisible(true); //Set the extra pane's visibility for Scientific Book
             if (specificLiteraryCategoryComboBox.isVisible()) { //hide Literary Book's combobox if it's showing
                 specificLiteraryCategoryComboBox.setVisible(false);
@@ -145,7 +145,7 @@ public class InsertionMenuController {
         try {
             // Check if general Category Combobox has any value selected
             if (generalCategoryComboBox.getValue() == null) { // if no value is selected
-                throw new EmptyValueException("Πρεπει να επιλεξεις το πεδιο Επελεξε εδω πρωτα! Δεν μπορει να ειναι αδειο!"); //throw custome exception
+                throw new EmptyValueException("You have to choose one of the options first! It can't be empty"); //throw custome exception
             }
             String typeOfBook = generalCategoryComboBox.getSelectionModel().getSelectedItem(); //Store general category combobox value
             String title = titleTextField.getText(); //Store title value
@@ -154,7 +154,7 @@ public class InsertionMenuController {
             String releaseYear = releaseYearTextField.getText(); //Store release Year value
             String innerType;
             String scientificField;
-            if (generalCategoryComboBox.getValue().equals("ΕΠΙΣΤΗΜΟΝΙΚΟ")) { // Check if general combobox value equals "ΕΠΙΣΤΗΜΟΝΙΚΟ"
+            if (generalCategoryComboBox.getValue().equals("SCIENTIFIC")) { // Check if general combobox value equals "ΕΠΙΣΤΗΜΟΝΙΚΟ"
                 //Functions that (double check)/validate the input in the first four textfields
                 validateTitle(title);
                 validateAuthor(author);
@@ -164,16 +164,16 @@ public class InsertionMenuController {
                 scientificField = scientificFieldTextField.getText(); // store scientificText field's input -- FREE TEXT no boundaries
                 //Additional checks on the remaining inputs
                 if (innerType == null) {
-                    throw new EmptyValueException("Επελεξε μια τιμη στο πεδιο Ειδος! Δεν μπορει να ειναι αδειο!");
+                    throw new EmptyValueException("Select on of the options in the Sub Category field! It can't be empty!");
                 }
                 if (scientificField.isEmpty()) {
-                    throw new EmptyValueException("Εκχωρησε ελευθερο κειμενο στο πεδιο Επιστημονικο Πεδιο! Δεν μπορει να ειναι αδειο!");
+                    throw new EmptyValueException("No input found in the Scientific Text! It can't be empty!");
                 }
                 //If everything goes well, store all the values like so
                 ScientificBook bookEntry = new ScientificBook(typeOfBook, StringUtils.stripAccents(title), StringUtils.stripAccents(author), Long.parseLong(isbn), Integer.parseInt(releaseYear), innerType, scientificField);
                 new CustomQueryBuilder(bookEntry);
 
-            } else if (generalCategoryComboBox.getValue().equals("ΛΟΓΟΤΕΧΝΙΚΟ")) { // Check if general combobox value equals "ΛΟΓΟΤΕΧΝΙΚΟ"
+            } else if (generalCategoryComboBox.getValue().equals("LITERARY")) { // Check if general combobox value equals "ΛΟΓΟΤΕΧΝΙΚΟ"
                 //Functions that (double check)/validate the input in the first four textfields
                 validateTitle(title);
                 validateAuthor(author);
@@ -182,7 +182,7 @@ public class InsertionMenuController {
                 innerType = specificLiteraryCategoryComboBox.getValue(); //store the corresponding enum's value based on the user's selection
                 //Additional check on the remaining input
                 if (innerType == null) {
-                    throw new EmptyValueException("Επελεξε μια τιμη στο πεδιο Ειδος! Δεν μπορει να ειναι αδειο!");
+                    throw new EmptyValueException("Select on of the options in the Sub Category field! It can't be empty!");
                 }
                 //If everything goes well, store all the values like so
                 LiteraryBook bookEntry = new LiteraryBook(typeOfBook, StringUtils.stripAccents(title), StringUtils.stripAccents(author), Long.parseLong(isbn), Integer.parseInt(releaseYear), innerType);
@@ -192,7 +192,7 @@ public class InsertionMenuController {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.initOwner(submitButton.getScene().getWindow());
             alert.setHeaderText(null);
-            alert.setContentText("Εγινε επιτυχης καταχωρηση του βιβλιου στη συλλογη σου!");
+            alert.setContentText("You have added a new book in your collection!");
             alert.showAndWait();
         } catch (EmptyValueException e) { // custom exception thrown from the validation methods
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -204,7 +204,7 @@ public class InsertionMenuController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(submitButton.getScene().getWindow());
             alert.setHeaderText(null);
-            alert.setContentText("Σφαλμα κατα την προσπελαση των αριθμων. Ελεγξε τα πεδια!");
+            alert.setContentText("Error while parsing a number! Check again!");
             alert.showAndWait();
         } catch (NumberOutOfBoundsException | CharacterMismatchException | SQLException e) { // custom exception thrown from the validation methods
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -233,7 +233,7 @@ public class InsertionMenuController {
     //OnMouseEvent Generated Method -- When return label is clicked
     @FXML
     void handleMouseClickOnReturnLabel(MouseEvent event) throws IOException {
-        new SceneExchange().changeScene("/fxml/mainMenu.fxml", false, "Μενου");
+        new SceneExchange().changeScene("/fxml/mainMenu.fxml", false, "Main Menu");
     }
 
     /**
@@ -311,7 +311,7 @@ public class InsertionMenuController {
     private void validateTitle(String title) throws CharacterMismatchException {
 
         if (title.trim().isEmpty()) {
-            throw new CharacterMismatchException("Σφαλμα! Το πεδιο Τιτλος ειναι κενο!");
+            throw new CharacterMismatchException("Error! Title field can't be empty!");
         }
     }
 
@@ -323,15 +323,15 @@ public class InsertionMenuController {
      */
     private void validateAuthor(String author) throws CharacterMismatchException {
         if (author.isEmpty()) {
-            throw new CharacterMismatchException("Σφαλμα! Το πεδιο Συγγραφεας ειναι κενο!");
+            throw new CharacterMismatchException("Error! Author field can't be empty!");
         }
 
         for (int i = 0; i < author.length(); i++) {
             if (Character.isDigit(author.charAt(i))) { //Check for any numbers inside the title field
-                throw new CharacterMismatchException("Δεν μπορεις να βαλεις αριθμους στο πεδιο Τιτλος!");
+                throw new CharacterMismatchException("You can't have numbers in the Title Field!");
             }
             if (!Character.isLetter(author.charAt(i)) && (!Character.toString(author.charAt(i)).matches("\\s"))) { //Check if anything other than letter or a space character is present
-                throw new CharacterMismatchException("Πρεπει να χρησιμοποιησεις μονο γραμματα στο πεδιο Συγγραφεας!");
+                throw new CharacterMismatchException("You can only enter characters in the Author field");
             }
         }
     }
@@ -346,16 +346,16 @@ public class InsertionMenuController {
     private void validateISBN(String isbn) throws CharacterMismatchException, NumberOutOfBoundsException {
         String selectISBNQuery = "SELECT ISBN FROM library WHERE ISBN = ?";
         if (isbn.isEmpty()) {
-            throw new CharacterMismatchException("Σφαλμα! Το πεδιο ISBN ειναι κενο!");
+            throw new CharacterMismatchException("Error! ISBN field can't be empty!");
         } else if (isbn.trim().length() != 13) { //ISBN size must be 13 digits
-            throw new NumberOutOfBoundsException("Το πεδιο ISBN εχει μη εγκυρο αριθμο ψηφιων! Δωσε 13 ψηφια!");
+            throw new NumberOutOfBoundsException("ISBN field contains an invalid number of digits! Please enter 13 digits!");
 
         } else if (Long.parseLong(isbn) < 9780000000000L || Long.parseLong(isbn) > 9799999999999L) { // ISBN number must be within these bounds
-            throw new NumberOutOfBoundsException("Ο ISBN αριθμος ειναι ακυρος! Ελεγξε καλυτερα το πεδιο!");
+            throw new NumberOutOfBoundsException("ISBN number is invalid! Number must begin with 978 or 978!");
         } else {
             for (int i = 0; i < isbn.length(); i++) {
                 if (!Character.isDigit(isbn.charAt(i))) {
-                    throw new CharacterMismatchException("Μπορεις να χρησιμοποιησεις μονο ψηφια στο πεδιο ISBN!");
+                    throw new CharacterMismatchException("You can only use numbers on the ISBN field!");
                 }
             }
         }
@@ -372,15 +372,15 @@ public class InsertionMenuController {
      */
     private void validateReleaseYear(String releaseYear) throws NumberOutOfBoundsException, CharacterMismatchException {
         if (releaseYear.isEmpty()) {
-            throw new CharacterMismatchException("Σφαλμα! Το πεδιο Ετος Εκδοσης ειναι κενο!");
+            throw new CharacterMismatchException("Error! Year of Publication field is empty!");
         } else if (releaseYear.trim().length() != 4) { // releaseYear must be 4 digits
-            throw new NumberOutOfBoundsException("Το πεδιο Ετος Εκδοσης εχει μη εγκυρο αριθμο ψηφιων. Δωσε 4 ψηφια!");
+            throw new NumberOutOfBoundsException("Year of Publication field consists of 4 digits only!");
         } else if (Integer.parseInt(releaseYear) < 1000 || Integer.parseInt(releaseYear) > currentYear) { //release year must be within these bounds
-            throw new NumberOutOfBoundsException("Το πεδιο Ετος Εκδοσης ειναι ακυρο! Ελεγξε το ξανα!");
+            throw new NumberOutOfBoundsException("Year of Publication field is invalid! Check again");
         } else {
             for (int i = 0; i < releaseYear.length(); i++) {
                 if (!Character.isDigit(releaseYear.charAt(i))) {
-                    throw new CharacterMismatchException("Μπορεις να χρησιμοποιησεις μονο ψηφια στο πεδιο Ετος Εκδοσης!");
+                    throw new CharacterMismatchException("You can only use numbers on the Year of Publication field!");
                 }
             }
         }

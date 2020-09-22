@@ -61,7 +61,7 @@ public class DisplayTableMenuController {
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
-            alert.setContentText("Error occured while trying to reach database!");
+            alert.setContentText("Error occurred while trying to reach database!");
             alert.showAndWait();
             System.exit(1);
         }
@@ -77,10 +77,10 @@ public class DisplayTableMenuController {
             ResultSet rs = connection.createStatement().executeQuery(sqlSelectStatement);
 
             while (rs.next()) {
-                if (rs.getString("Type").equals("ΛΟΓΟΤΕΧΝΙΚΟ")) {
+                if (rs.getString("Type").equals("LITERARY")) {
                     bookData.add(new LiteraryBook(rs.getString(1), rs.getString(2), rs.getString(3), rs.getLong(4), rs.getInt(5), rs.getString(6)));
                 }
-                if (rs.getString("Type").equals("ΕΠΙΣΤΗΜΟΝΙΚΟ")) {
+                if (rs.getString("Type").equals("SCIENTIFIC")) {
                     bookData.add(new ScientificBook(rs.getString(1), rs.getString(2), rs.getString(3), rs.getLong(4), rs.getInt(5), rs.getString(6), rs.getString(7)));
                 }
             }
@@ -102,7 +102,7 @@ public class DisplayTableMenuController {
     @FXML
     void handleReturnButton(ActionEvent event) throws IOException {
         //Swap Scenes
-        new SceneExchange().changeScene("/fxml/mainMenu.fxml", false, "Μενου");
+        new SceneExchange().changeScene("/fxml/mainMenu.fxml", false, "Main Menu");
     }
 
     //OnActionEvent Generated Method -- When Delete Button is pressed
@@ -113,10 +113,10 @@ public class DisplayTableMenuController {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION); //Popup alert to double check book deletion.
         alert.initOwner(deleteButton.getScene().getWindow()); // assign icon in the popup alert
-        alert.setTitle("Επιβεβαιωση διαγραφης!");
+        alert.setTitle("Confirm book deletion");
         alert.setHeaderText(null);
         alert.setResizable(false);
-        alert.setContentText("Εισαι σιγουρος οτι θελεις να διαγραψεις το βιβλιο?");
+        alert.setContentText("Do you really want to delete the book entry?");
 
         //Handle Alert Response
         Optional<ButtonType> result = alert.showAndWait(); //Save button pressed in the alert popup
@@ -126,10 +126,10 @@ public class DisplayTableMenuController {
             if (tableView.getSelectionModel().getSelectedItem() == null) { //if nothing was selected
                 Alert alert1 = new Alert(Alert.AlertType.ERROR);
                 alert1.initOwner(deleteButton.getScene().getWindow());
-                alert1.setTitle("Σφαλμα");
+                alert1.setTitle("Error");
                 alert1.setHeaderText(null);
                 alert1.setResizable(false);
-                alert1.setContentText("Δεν υπαρχει επιλεγμενο βιβλιο!");
+                alert1.setContentText("No book entry selected!");
                 alert1.showAndWait();
 
             } else { //If user selected a book entry from the table

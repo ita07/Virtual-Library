@@ -52,21 +52,21 @@ public class MainMenuController {
     @FXML
     void handleShowButtonActionPerformed(ActionEvent event) throws IOException {
         //Swap scenes
-        new SceneExchange().changeScene("/fxml/displayTableMenu.fxml", true, "Λιστα Βιβλιων");
+        new SceneExchange().changeScene("/fxml/displayTableMenu.fxml", true, "Book List");
     }
 
     //OnActionEvent Generated Method -- When Search Button is pressed
     @FXML
     void handleSearchButtonActionPerformed(ActionEvent event) throws IOException {
         //Swap scenes
-        new SceneExchange().changeScene("/fxml/searchMenu.fxml", true, "Ευρεση Βιβλιου");
+        new SceneExchange().changeScene("/fxml/searchMenu.fxml", true, "Search");
     }
 
     //OnActionEvent Generated Method -- When Insert Button is pressed
     @FXML
     void handleInsertBookButtonActionPerformed(ActionEvent event) throws IOException {
         //Swap scenes
-        new SceneExchange().changeScene("/fxml/insertionMenu.fxml", false, "Εισαγωγη Βιβλιου");
+        new SceneExchange().changeScene("/fxml/insertionMenu.fxml", false, "Insert");
     }
 
     //OnActionEvent Generated Method -- When Exit Button is pressed
